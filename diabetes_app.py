@@ -21,11 +21,11 @@ model = joblib.load("diabetes_model.joblib")
 
 # ----------------- Secrets for DB -----------------
 db_config = {
-    "host": st.secrets["db_host"],
-    "user": st.secrets["db_user"],
-    "password": st.secrets["db_password"],
-    "database": st.secrets["db_name"],
-    "port": int(st.secrets["db_port"])
+    "host": st.secrets["db"]["db_host"],
+    "user": st.secrets["db"]["db_user"],
+    "password": st.secrets["db"]["db_password"],
+    "database": st.secrets["db"]["db_name"],
+    "port": int(st.secrets["db"]["db_port"])
 }
 
 # ----------------- DB Connection -----------------
@@ -92,7 +92,7 @@ def login():
                 if user and bcrypt.checkpw(password.encode(), user["password_hash"].encode()):
                     st.session_state["logged_in"] = True
                     st.session_state["username"] = email
-                    st.session_state["role"] = user["role"]
+                    st.session_state["role"] = user.get("role", "user")
                     st.rerun()
                 else:
                     st.error("Invalid email or password.")
@@ -179,7 +179,7 @@ def main():
             st.session_state.clear()
             st.rerun()
 
-        if st.session_state["role"] == "admin":
+        if st.session_state.get("role") == "admin":
             admin_dashboard()
         else:
             user_dashboard()
