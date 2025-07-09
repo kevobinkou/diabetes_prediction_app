@@ -12,6 +12,6 @@ venv/
 Thumbs.db
 
 # Ignore model files
-*.joblib
 *.pkl
 .streamlit/secrets.toml
+# *.joblib
